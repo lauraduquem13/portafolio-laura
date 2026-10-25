@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Dossier comercial de Laura Duque, creadora de contenido en Medellín.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+<title>Dossier Laura Duque</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap">
+<style>
+/* Layout: dossier en diapositivas a pantalla completa; barra superior con menú, barra inferior con avance. Cada diapositiva centra una columna de 1180px y hace scroll propio si no cabe. */
+:root{
+  --burgundy:#5C1430;
+  --deep:#4A1026;
+  --rose:#F3E7EA;
+  --ivory:#FAF7F4;
+  --ink:#2B0A16;
+  --muted:#7A5A64;
+  --blush:#F3B9C6;
+  --line:rgba(92,20,48,.14);
+  --on-deep-muted:rgba(250,247,244,.74);
+  --font:"Poppins",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --bar:64px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--ivory);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+h1,h2,h3{margin:0;line-height:1.06;letter-spacing:-.02em;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--burgundy);outline-offset:3px;border-radius:6px}
+
+/* ---------- barras ---------- */
+.top,.bottom{position:fixed;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));transition:color .5s}
+.top{top:0;height:calc(var(--bar) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+.bottom{bottom:0;height:calc(var(--bar) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px)}
+.logo{font-weight:700;font-size:.95rem;text-decoration:none;color:var(--deep);letter-spacing:-.01em;background:none;border:0;padding:0}
+.logo span{font-weight:300;color:var(--burgundy)}
+body.dark .logo,body.dark .logo span,body.dark .count,body.dark .nbtn{color:var(--ivory)}
+body.dark .nbtn{box-shadow:inset 0 0 0 1.5px rgba(250,247,244,.35)}
+body.dark .prog{background:rgba(250,247,244,.18)}
+body.dark .prog i{background:var(--ivory)}
+.menu-btn{display:flex;align-items:center;gap:10px;border:0;background:var(--burgundy);color:var(--ivory);padding:10px 16px 10px 18px;border-radius:999px;font-size:.82rem;font-weight:600;transition:transform .3s var(--ease)}
+.menu-btn:hover{transform:translateY(-1px)}
+.menu-btn .burg{display:grid;gap:4px}
+.menu-btn .burg i{display:block;width:16px;height:1.6px;background:currentColor;border-radius:2px}
+body.dark .menu-btn{background:var(--ivory);color:var(--burgundy)}
+.count{font-size:.78rem;font-weight:600;color:var(--deep);font-variant-numeric:tabular-nums;letter-spacing:.06em;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.count b{font-weight:400;opacity:.7;margin-left:10px;letter-spacing:0}
+.prog{position:absolute;left:max(20px,env(safe-area-inset-left,0px));right:max(20px,env(safe-area-inset-right,0px));top:0;height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--burgundy);width:0;transition:width .6s var(--ease)}
+.navs{display:flex;gap:8px}
+.nbtn{width:44px;height:44px;border-radius:50%;border:0;background:transparent;box-shadow:inset 0 0 0 1.5px var(--line);color:var(--deep);display:grid;place-items:center;font-size:1.1rem;transition:background .3s,transform .3s var(--ease)}
+.nbtn:hover:not(:disabled){transform:scale(1.06)}
+.nbtn:disabled{opacity:.3;cursor:default}
+
+/* ---------- escenario ---------- */
+.deck{position:fixed;inset:0}
+.slide{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  padding-top:calc(var(--bar) + env(safe-area-inset-top,0px) + 12px);padding-bottom:calc(var(--bar) + env(safe-area-inset-bottom,0px) + 16px);
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));
+  display:grid;align-items:center;visibility:hidden;opacity:0;transform:translateX(6%);transition:opacity .6s var(--ease),transform .7s var(--ease),visibility 0s .7s}
+.slide.prev{transform:translateX(-6%)}
+.slide.on{visibility:visible;opacity:1;transform:none;transition:opacity .6s var(--ease),transform .7s var(--ease),visibility 0s}
+.slide.dk{background:var(--deep);color:var(--ivory)}
+.slide.bg{background:var(--burgundy);color:var(--ivory)}
+.slide.rs{background:var(--rose)}
+.inner{width:100%;max-width:1180px;margin:0 auto;min-width:0}
+/* entrada escalonada de los hijos marcados */
+.slide .st{transition:transform .8s var(--ease),opacity .8s var(--ease)}
+.slide:not(.on) .st{transform:translateY(22px);opacity:0}
+.slide.on .st:nth-child(2){transition-delay:.08s}.slide.on .st:nth-child(3){transition-delay:.16s}.slide.on .st:nth-child(4){transition-delay:.24s}.slide.on .st:nth-child(5){transition-delay:.32s}
+
+.eyebrow{font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--burgundy);display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1.5px;background:currentColor}
+.dk .eyebrow,.bg .eyebrow{color:var(--blush)}
+.h2{font-size:clamp(1.9rem,4.2vw,3.3rem);font-weight:700;color:var(--deep)}
+.h2 em{font-style:normal;font-weight:300;color:var(--burgundy)}
+.dk .h2,.bg .h2{color:var(--ivory)}
+.dk .h2 em,.bg .h2 em{color:var(--blush)}
+.lead{color:var(--muted);max-width:60ch;font-size:1rem}
+.dk .lead,.bg .lead{color:var(--on-deep-muted)}
+.head{display:grid;gap:12px;margin-bottom:clamp(22px,3.5vw,40px)}
+.todo{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.06em;padding:3px 10px;border-radius:999px;box-shadow:inset 0 0 0 1.3px currentColor;opacity:.7;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:13px 22px;font-weight:600;font-size:.88rem;text-decoration:none;transition:transform .3s var(--ease),background .3s}
+.btn-p{background:var(--burgundy);color:var(--ivory)}
+.btn-p:hover{background:var(--deep);transform:translateY(-2px)}
+.btn-g{background:transparent;color:var(--deep);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn-g:hover{box-shadow:inset 0 0 0 1.5px var(--burgundy)}
+.dk .btn-p,.bg .btn-p{background:var(--ivory);color:var(--burgundy)}
+
+/* ---------- 1 portada ---------- */
+.cover .inner{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(28px,5vw,72px);align-items:center}
+.cover h1{font-size:clamp(3.2rem,9.5vw,7.4rem);font-weight:800;color:var(--burgundy);letter-spacing:-.045em;line-height:.9}
+.cover h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+.cover h1 .ln span{display:inline-block;transform:translateY(105%);transition:transform 1.1s var(--ease)}
+.cover.on h1 .ln span{transform:none}
+.cover.on h1 .ln:nth-child(2) span{transition-delay:.12s}
+.cover h1 small{display:block;font-size:clamp(.8rem,1.4vw,1rem);font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--deep);margin-top:14px}
+.cv-copy{display:grid;gap:22px;min-width:0}
+.tagline{font-size:clamp(1.15rem,2.2vw,1.6rem);font-weight:300;color:var(--deep)}
+.rot{display:inline-grid;vertical-align:bottom;font-weight:600;color:var(--burgundy)}
+.rot>span{grid-area:1/1;transition:transform .6s var(--ease),opacity .6s var(--ease)}
+.rot>span:not(.on){opacity:0;transform:translateY(60%)}
+.rot>span.out{opacity:0;transform:translateY(-60%)}
+.roles{display:flex;flex-wrap:wrap;gap:8px}
+.roles span{font-size:.78rem;font-weight:500;padding:7px 14px;border-radius:999px;box-shadow:inset 0 0 0 1.3px var(--line);color:var(--deep)}
+.arch-wrap{position:relative;justify-self:center;width:min(100%,340px)}
+.arch{aspect-ratio:4/5.3;max-width:100%;border-radius:999px 999px 26px 26px;overflow:hidden;position:relative;background:linear-gradient(160deg,var(--rose),#E6C9D0 55%,#C98A9A);box-shadow:0 40px 80px -40px rgba(74,16,38,.55);animation:float 7s ease-in-out infinite}
+.arch img,.arch video{width:100%;height:100%;object-fit:cover;display:block}
+.ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--deep);font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+.ph i{font-style:normal;display:block;font-size:3.2rem;letter-spacing:-.04em;font-weight:800;color:rgba(92,20,48,.22);text-transform:none}
+@keyframes float{50%{transform:translateY(-10px)}}
+.chip{position:absolute;background:var(--ivory);color:var(--deep);font-size:.74rem;font-weight:600;padding:8px 14px;border-radius:999px;box-shadow:0 14px 30px -14px rgba(74,16,38,.45);display:flex;gap:8px;align-items:center;white-space:nowrap;animation:bob 6s ease-in-out infinite}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--burgundy)}
+.chip.c1{top:14%;left:-12%}.chip.c2{top:50%;right:-10%;animation-delay:-2s}
+.chip.c3{bottom:8%;left:-6%;animation-delay:-4s;background:var(--burgundy);color:var(--ivory)}.chip.c3::before{background:var(--ivory)}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.rec{position:absolute;top:20px;right:20px;display:flex;gap:7px;align-items:center;font-size:.64rem;font-weight:700;letter-spacing:.14em;color:var(--ivory);background:rgba(43,10,22,.45);padding:5px 10px;border-radius:999px}
+.rec::before{content:"";width:7px;height:7px;border-radius:50%;background:#ff4d6d;animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.2}}
+.hint{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:10px}
+.hint kbd{font-family:inherit;font-size:.72rem;padding:2px 8px;border-radius:6px;box-shadow:inset 0 0 0 1.3px var(--line)}
+@media (max-width:820px){.cover .inner{grid-template-columns:1fr}.arch-wrap{width:min(62%,250px);order:-1}.chip.c1{left:-18%}.chip.c2{right:-18%}}
+
+/* ---------- 2 sobre mí ---------- */
+.about .inner{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,5vw,72px);align-items:center}
+.about h2{font-size:clamp(2.3rem,5vw,4rem);font-weight:700;color:var(--ivory)}
+.reels{position:relative;width:min(100%,360px);aspect-ratio:1/1.25;justify-self:center}
+.reel{position:absolute;width:62%;aspect-ratio:9/16;border-radius:26px;overflow:hidden;background:var(--burgundy);box-shadow:0 40px 70px -30px rgba(0,0,0,.6),0 0 0 5px rgba(250,247,244,.9)}
+.reel video{width:100%;height:100%;object-fit:cover;display:block}
+.reel.r1{left:0;top:4%;transform:rotate(-5deg);z-index:2}
+.reel.r2{right:0;top:12%;transform:rotate(6deg);opacity:.92}
+.reels:hover .r1{transform:rotate(-8deg) translateX(-10px)}
+.reels:hover .r2{transform:rotate(9deg) translateX(10px)}
+.reel.r1,.reel.r2{transition:transform .6s var(--ease)}
+.reels .chip{z-index:3}
+.reels .chip.c1{top:2%;left:auto;right:-4%}
+.reels .chip.c3{bottom:2%;left:-4%}
+.about h2 span{font-weight:300;color:var(--blush)}
+.quote{margin-top:24px;font-size:clamp(1.05rem,1.7vw,1.3rem);font-weight:300;font-style:italic;line-height:1.55;padding-left:18px;border-left:2px solid var(--blush);max-width:34ch}
+.about-copy{display:grid;gap:16px;color:var(--on-deep-muted);min-width:0}
+.about-copy strong{color:var(--ivory);font-weight:600}
+.values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:8px}
+.values div{background:rgba(250,247,244,.07);border-radius:16px;padding:16px;display:grid;gap:4px}
+.values b{color:var(--ivory);font-weight:600;font-size:.95rem}
+.values span{font-size:.8rem}
+@media (max-width:820px){.about .inner{grid-template-columns:1fr}.values{grid-template-columns:1fr}}
+
+/* ---------- 5 servicios ---------- */
+.svc{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.svc article{grid-column:span 2}
+.svc article.wide{grid-column:span 3}
+.svc article{border-radius:24px;padding:26px;display:grid;gap:12px;align-content:start;background:rgba(250,247,244,.07);transition:background .4s;min-width:0}
+.svc article:hover{background:rgba(250,247,244,.13)}
+.svc .n{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--blush)}
+.svc h3{font-size:1.3rem;font-weight:600;color:var(--ivory)}
+.svc p{font-size:.88rem;color:var(--on-deep-muted)}
+.svc ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:.84rem;color:var(--ivory)}
+.svc li::before{content:"✦ ";color:var(--blush)}
+@media (max-width:820px){.svc{grid-template-columns:1fr}.svc article,.svc article.wide{grid-column:auto}}
+
+/* ---------- casos ---------- */
+.case .inner{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center}
+.phone{position:relative;aspect-ratio:9/16;max-width:100%;border-radius:30px;overflow:hidden;background:var(--deep);box-shadow:0 40px 70px -40px rgba(43,10,22,.7),0 0 0 6px var(--ivory),0 0 0 7px var(--line)}
+.phone video{width:100%;height:100%;object-fit:cover;display:block}
+.phone .pbtn{position:absolute;inset:0;border:0;background:linear-gradient(180deg,rgba(43,10,22,0) 55%,rgba(43,10,22,.7));display:grid;place-items:center;transition:opacity .3s}
+.phone .pbtn::before{content:"";width:62px;height:62px;border-radius:50%;background:rgba(250,247,244,.94) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='%235C1430'/%3E%3C/svg%3E") 55% 50%/26px no-repeat;box-shadow:0 10px 30px -8px rgba(43,10,22,.5)}
+.phone.playing .pbtn{opacity:0}
+.phone .vbar{position:absolute;left:14px;right:14px;bottom:14px;height:3px;border-radius:3px;background:rgba(250,247,244,.3);overflow:hidden;pointer-events:none}
+.phone .vbar i{display:block;height:100%;width:0;background:var(--ivory)}
+.phone .mute{position:absolute;top:12px;right:12px;border:0;background:rgba(43,10,22,.45);color:var(--ivory);font-size:.68rem;font-weight:600;padding:6px 10px;border-radius:999px;z-index:2}
+.case-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.case-meta span{font-size:.72rem;font-weight:500;padding:5px 11px;border-radius:999px;background:var(--rose);color:var(--deep)}
+.angle{background:var(--burgundy);color:var(--ivory);border-radius:18px;padding:16px 18px;display:grid;gap:4px;font-size:.9rem}
+.angle small{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--blush);font-weight:600}
+.beats{display:grid;gap:6px;margin-top:14px;counter-reset:b}
+.beat{border:0;text-align:left;background:transparent;border-radius:14px;padding:11px 14px;display:grid;grid-template-columns:54px 1fr;gap:12px;align-items:start;transition:background .3s;min-width:0}
+.beat:hover{background:rgba(92,20,48,.05)}
+.beat.on{background:var(--ivory);box-shadow:0 10px 30px -22px rgba(74,16,38,.6)}
+.beat time{font-size:.74rem;font-weight:600;color:var(--burgundy);font-variant-numeric:tabular-nums;padding-top:2px}
+.beat b{display:block;font-weight:600;color:var(--deep);font-size:.92rem}
+.beat span{display:block;font-size:.84rem;color:var(--muted)}
+.beat .q{font-style:italic;color:var(--deep);opacity:.85}
+.tip{font-size:.78rem;color:var(--muted);margin-top:8px}
+@media (max-width:820px){.case .inner{grid-template-columns:1fr}.phone{width:min(240px,70%);margin-inline:auto}}
+
+/* ---------- divisor ---------- */
+.divider .inner{display:grid;gap:22px;align-content:center}
+.divider h2{font-size:clamp(3rem,10vw,8rem);font-weight:800;letter-spacing:-.05em;line-height:.92;color:var(--ivory)}
+.divider h2 span{font-weight:300;color:var(--blush);display:block}
+.d-list{display:grid;gap:2px;margin-top:8px;max-width:640px}
+.d-list button{border:0;background:none;text-align:left;display:flex;gap:16px;align-items:baseline;padding:14px 0;border-bottom:1px solid rgba(250,247,244,.18);color:var(--ivory);font-size:clamp(1rem,1.8vw,1.2rem);font-weight:500;transition:padding .35s var(--ease),color .3s}
+.d-list button:hover{padding-left:10px;color:var(--blush)}
+.d-list small{font-size:.72rem;font-weight:600;color:var(--blush);font-variant-numeric:tabular-nums}
+
+/* ---------- galería ---------- */
+.fchips{display:flex;flex-wrap:wrap;gap:8px}
+.fchips span{font-size:.76rem;font-weight:500;padding:6px 13px;border-radius:999px;background:var(--rose);color:var(--deep)}
+.gal{columns:4 200px;column-gap:14px}
+.gi{display:block;width:100%;break-inside:avoid;margin:0 0 14px;border:0;padding:0;position:relative;border-radius:20px;overflow:hidden;background:var(--g);transition:transform .5s var(--ease),box-shadow .5s;text-align:left}
+.gi.video{aspect-ratio:9/16}
+.gi.foto{aspect-ratio:4/5}
+.gi:hover{transform:translateY(-4px);box-shadow:0 26px 44px -30px rgba(74,16,38,.6)}
+.gi img,.gi video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.gi:hover img,.gi:hover video{transform:scale(1.06)}
+.gi::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,10,22,0) 55%,rgba(43,10,22,.7))}
+.gcap{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;color:var(--ivory);font-weight:600;font-size:.88rem;display:grid}
+.gcap small{font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;opacity:.8}
+.gplay{position:absolute;top:50%;left:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;z-index:2;background:rgba(250,247,244,.92) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='%235C1430'/%3E%3C/svg%3E") 55% 50%/20px no-repeat;transition:transform .4s var(--ease)}
+.gi:hover .gplay{transform:scale(1.12)}
+
+/* ---------- tarifas ---------- */
+.rate-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.rate{background:var(--ivory);border-radius:24px;padding:24px;display:grid;gap:12px;align-content:start;position:relative;min-width:0;transition:transform .5s var(--ease),box-shadow .5s}
+.rate:hover{transform:translateY(-6px);box-shadow:0 30px 50px -36px rgba(74,16,38,.55)}
+.rate.feat{background:var(--burgundy);color:var(--ivory)}
+.rate .badge{position:absolute;top:-11px;left:22px;background:var(--deep);color:var(--ivory);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:5px 11px;border-radius:999px}
+.rate small{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--burgundy)}
+.rate.feat small{color:var(--blush)}
+.rate h3{font-size:1.25rem;font-weight:600;color:var(--deep)}
+.rate.feat h3{color:var(--ivory)}
+.rate .price{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.rate ul{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:.86rem}
+.rate li{display:grid;grid-template-columns:16px 1fr;gap:8px}
+.rate li::before{content:"✓";color:var(--burgundy);font-weight:700}
+.rate.feat li::before{color:var(--blush)}
+.rows{display:grid;gap:0;background:var(--ivory);border-radius:24px;overflow:hidden}
+.row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:16px 22px;border-bottom:1px solid var(--line);min-width:0}
+.row:last-child{border:0}
+.row b{font-weight:600;color:var(--deep);font-size:.95rem}
+.row span{display:block;font-size:.8rem;color:var(--muted)}
+.row .v{font-weight:700;color:var(--burgundy);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.colh{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--burgundy);margin:0 0 10px 4px}
+.ads-scale{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:4px}
+.ads-scale div{background:var(--ivory);border-radius:16px;padding:14px 10px;text-align:center;display:grid;gap:2px}
+.ads-scale b{font-size:1.25rem;color:var(--burgundy);font-variant-numeric:tabular-nums}
+.ads-scale span{font-size:.74rem;color:var(--muted)}
+@media (max-width:900px){.rate-grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+@media (max-width:420px){.ads-scale{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ---------- tarifas extra ---------- */
+.note-card{background:var(--ivory);border-radius:20px;padding:16px 20px;display:grid;gap:4px}
+.note-card b{color:var(--deep);font-weight:600}
+.note-card p{font-size:.86rem;color:var(--muted)}
+.linkish{border:0;background:none;padding:0;color:var(--burgundy);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- visor ---------- */
+.lb{position:fixed;inset:0;z-index:90;background:rgba(43,10,22,.88);backdrop-filter:blur(10px);display:grid;place-items:center;
+  padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));animation:fade .35s var(--ease)}
+@keyframes fade{from{opacity:0}}
+.lb-inner{width:min(400px,100%);display:grid;gap:12px;animation:zoom .45s var(--ease)}
+@keyframes zoom{from{transform:scale(.92);opacity:0}}
+.lb-frame{aspect-ratio:9/16;max-height:76vh;max-width:100%;width:100%;margin-inline:auto;border-radius:24px;overflow:hidden;background:var(--g,var(--deep));position:relative}
+.lb-frame.foto{aspect-ratio:4/5}
+.lb-frame video,.lb-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.lb-empty{position:absolute;inset:0;display:grid;place-content:center;gap:8px;text-align:center;color:var(--ivory);padding:24px;font-size:.9rem}
+.lb-empty b{font-size:1.1rem}
+.lb-cap{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--ivory)}
+
+/* ---------- condiciones ---------- */
+.cond{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ci{border:0;text-align:left;background:var(--ivory);border-radius:18px;padding:16px 18px;display:grid;gap:0;transition:box-shadow .3s;min-width:0}
+.ci:hover{box-shadow:0 14px 30px -24px rgba(74,16,38,.6)}
+.ci-top{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.ci-top i{font-style:normal;width:30px;height:30px;border-radius:50%;background:var(--rose);color:var(--burgundy);display:grid;place-items:center;font-size:.8rem;font-weight:700}
+.ci-top b{font-weight:600;color:var(--deep);font-size:.95rem}
+.ci-top .pl{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.4px var(--line);display:grid;place-items:center;color:var(--burgundy);transition:transform .4s var(--ease)}
+.ci-top .pl::before{content:"+";line-height:1}
+.ci[aria-expanded="true"] .pl{transform:rotate(45deg)}
+.ci-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
+.ci[aria-expanded="true"] .ci-body{grid-template-rows:1fr}
+.ci-body>div{overflow:hidden;font-size:.86rem;color:var(--muted);padding-left:42px}
+.ci-body>div>p{padding-top:10px}
+@media (max-width:820px){.cond{grid-template-columns:1fr}}
+
+/* ---------- proceso ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;position:relative}
+.track{position:absolute;top:27px;left:28px;right:28px;height:2px;background:rgba(250,247,244,.18)}
+.track i{display:block;height:100%;width:0;background:var(--ivory);transition:width 2.2s var(--ease) .3s}
+.slide.on .track i{width:100%}
+.step{display:grid;gap:10px;align-content:start;position:relative;min-width:0}
+.dot{width:56px;height:56px;border-radius:50%;background:var(--burgundy);box-shadow:inset 0 0 0 2px rgba(250,247,244,.3);display:grid;place-items:center;font-weight:700;color:var(--ivory);font-variant-numeric:tabular-nums;position:relative;z-index:1;transition:background .4s,color .4s}
+.slide.on .step .dot{background:var(--ivory);color:var(--burgundy)}
+.slide.on .step:nth-child(3) .dot{transition-delay:.6s}.slide.on .step:nth-child(4) .dot{transition-delay:1.1s}.slide.on .step:nth-child(5) .dot{transition-delay:1.6s}
+.step h3{font-size:1.15rem;font-weight:600}
+.step p{font-size:.88rem;color:var(--on-deep-muted)}
+.step small{font-size:.74rem;color:var(--blush)}
+@media (max-width:820px){.steps{grid-template-columns:1fr}.track{top:28px;bottom:28px;left:27px;right:auto;width:2px;height:auto}.track i{width:100%;height:0;transition:height 2.2s var(--ease) .3s}.slide.on .track i{height:100%;width:100%}.step{grid-template-columns:56px 1fr;column-gap:16px}.step .dot{grid-row:span 3}}
+
+/* ---------- contacto ---------- */
+.contact .inner{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(28px,5vw,64px);align-items:end}
+.contact h2{font-size:clamp(2.3rem,5.6vw,4.6rem);font-weight:800;letter-spacing:-.04em;max-width:15ch}
+.contact h2 span{font-weight:300;color:var(--blush)}
+.c-card{background:rgba(250,247,244,.08);border-radius:24px;padding:24px;display:grid;gap:14px;min-width:0}
+.c-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid rgba(250,247,244,.14)}
+.c-row:last-child{border:0;padding-bottom:0}
+.c-row small{display:block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;opacity:.7}
+.c-row b,.c-row a{font-weight:600;text-decoration:none;user-select:all;overflow-wrap:anywhere}
+.copy{border:0;background:var(--ivory);color:var(--burgundy);font-size:.74rem;font-weight:700;padding:8px 14px;border-radius:999px}
+.interest{font-size:.9rem;color:var(--on-deep-muted)}
+.interest b{color:var(--ivory)}
+@media (max-width:820px){.contact .inner{grid-template-columns:1fr}}
+
+/* ---------- menú ---------- */
+.menu{position:fixed;inset:0;z-index:80;background:var(--deep);color:var(--ivory);overflow-y:auto;
+  padding-top:calc(env(safe-area-inset-top,0px) + 20px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 28px);
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));animation:mIn .5s var(--ease)}
+@keyframes mIn{from{clip-path:circle(0% at calc(100% - 60px) 32px)}to{clip-path:circle(150% at calc(100% - 60px) 32px)}}
+.menu .inner{max-width:1180px}
+.m-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:clamp(20px,4vw,44px)}
+.m-top .logo,.m-top .logo span{color:var(--ivory)}
+.m-close{border:0;width:44px;height:44px;border-radius:50%;background:var(--ivory);color:var(--burgundy);font-size:1.3rem}
+.m-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(18px,3vw,36px)}
+.m-col h4{margin:0 0 12px;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--blush);font-weight:600}
+.m-col ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.m-col button{border:0;background:none;padding:6px 0;text-align:left;display:flex;gap:12px;align-items:baseline;font-size:clamp(1.05rem,1.8vw,1.35rem);font-weight:600;color:var(--ivory);opacity:.82;transition:opacity .3s,transform .3s var(--ease)}
+.m-col button:hover,.m-col button.cur{opacity:1;transform:translateX(6px)}
+.m-col button.cur{color:var(--blush)}
+.m-col button small{font-size:.7rem;font-weight:500;opacity:.6;font-variant-numeric:tabular-nums}
+.m-foot{margin-top:clamp(24px,5vw,56px);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;color:var(--on-deep-muted);font-size:.82rem}
+@media (max-width:900px){.m-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.m-grid{grid-template-columns:1fr}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .slide:not(.on) .st{transform:none;opacity:1}
+  .cover h1 .ln span{transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <button class="logo" type="button" data-go="inicio">Laura Duque<span> · Creadora de contenido</span></button>
+  <button class="menu-btn" type="button" id="menu-open" aria-haspopup="dialog">Dossier comercial <span class="burg"><i></i><i></i><i></i></span></button>
+</header>
+
+<main class="deck" id="deck">
+
+  <!-- 1 -->
+  <section class="slide cover" data-id="inicio" data-title="Inicio" data-group="Presentación">
+    <div class="inner">
+      <div class="cv-copy">
+        <span class="eyebrow st">Creadora de contenido · Medellín, Colombia</span>
+        <h1><span class="ln"><span>Laura</span></span><span class="ln"><span>Duque</span></span></h1>
+        <p class="tagline st">Contenido que se siente <span class="rot" id="rot"><span class="on">real.</span><span>cercano.</span><span>honesto.</span><span>estratégico.</span></span></p>
+        <div class="roles st"><span>Contenido para mi comunidad</span><span>UGC para marcas</span><span>Videos para anuncios</span></div>
+        <div class="st" style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-p" type="button" data-go="caso-1">Ver mi trabajo →</button>
+          <button class="btn btn-g" type="button" data-go="tarifas-marca">Tarifas</button>
+        </div>
+        <p class="hint st">Navega con <kbd>←</kbd> <kbd>→</kbd> o desliza</p>
+      </div>
+      <div class="arch-wrap">
+        <div class="arch" id="profile"><div class="ph"><div><i>LD</i>Tu foto de perfil</div></div></div>
+        <span class="rec">REC</span>
+        <span class="chip c1">Crecimiento personal</span>
+        <span class="chip c2">Beauty</span>
+        <span class="chip c3">Lifestyle</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide dk about" data-id="sobre-mi" data-title="Sobre mí" data-group="Presentación">
+    <div class="inner">
+      <div class="about-copy">
+        <span class="eyebrow st">Sobre mí</span>
+        <h2 class="st">Hola, soy <span>Laura.</span></h2>
+        <p class="st">Soy creadora de contenido. Comparto mis procesos, mis rutinas y lo que voy aprendiendo, y llevo esa misma voz a los videos que hago para marcas, en mi perfil o en el suyo.</p>
+        <p class="st">Mi estilo es <strong>cercano, honesto y realista</strong>. Hablo como alguien con quien tu audiencia se identifica, y por eso un producto se siente creíble en mi voz.</p>
+        <div class="values st">
+          <div><b>Cercana</b><span>Hablo como hablaría con una amiga.</span></div>
+          <div><b>Honesta</b><span>Recomiendo lo que de verdad uso.</span></div>
+          <div><b>Estratégica</b><span>Cada guion tiene un ángulo y un objetivo.</span></div>
+        </div>
+      </div>
+      <div class="reels st" aria-hidden="true">
+        <div class="reel r2"><video src="media/video-2.mp4#t=6" muted loop playsinline preload="metadata"></video></div>
+        <div class="reel r1"><video src="media/video-1.mp4#t=10" muted loop playsinline preload="metadata"></video></div>
+        <span class="chip c1">Frente a cámara</span>
+        <span class="chip c3">Grabado en mi día a día</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide dk" data-id="servicios" data-title="Qué hago" data-group="Presentación">
+    <div class="inner">
+      <div class="head">
+        <span class="eyebrow st">Qué hago</span>
+        <h2 class="h2 st">Cómo puedo <em>ayudar a tu marca.</em></h2>
+      </div>
+      <div class="svc st">
+        <article><span class="n">En mi perfil</span><h3>Contenido para mi comunidad</h3><p>Tu marca aparece en mis redes, contada con mi voz y dentro de mi día a día.</p><ul><li>Historias</li><li>Reels y TikToks</li><li>Publicación en colaboración</li></ul></article>
+        <article><span class="n">En tu perfil</span><h3>UGC para tu marca</h3><p>Videos y fotos que tu marca publica en sus propias redes. Yo creo; tú publicas.</p><ul><li>Videos verticales 9:16</li><li>Fotos de producto y rutina</li><li>Guion y ganchos incluidos</li></ul></article>
+        <article><span class="n">En tus anuncios</span><h3>Videos para pauta</h3><p>Guiones pensados para vender, con un ángulo claro para testear en Meta y TikTok Ads.</p><ul><li>Licencia hasta 90 días</li><li>Ganchos que frenan el scroll</li><li>Llamada a la acción directa</li></ul></article>
+        <article class="wide"><span class="n">Fotografía</span><h3>Fotos para tu marca</h3><p>Fotos de producto, rutina y estilo de vida, con la estética de tu marca y listas para redes o tienda online.</p></article>
+        <article class="wide"><span class="n">Producción</span><h3>Día de grabación</h3><p>Voy al lugar que tu marca defina y grabo o hago fotos durante la jornada. La marca proporciona el espacio, el equipo y lo necesario.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- divisor -->
+  <section class="slide bg divider" data-id="mi-trabajo" data-title="Mi trabajo" data-group="Mi trabajo">
+    <div class="inner">
+      <span class="eyebrow st">Portafolio</span>
+      <h2 class="st">Ahora, <span>mi trabajo.</span></h2>
+      <p class="lead st">Primero, dos videos para anuncio con la estrategia que hay detrás de cada guion: el gancho, el ángulo y por qué funciona cada momento. Después, una muestra de más contenido.</p>
+      <div class="d-list st">
+        <button type="button" data-go="caso-1"><small>01</small>Detener el scroll con una orden</button>
+        <button type="button" data-go="caso-2"><small>02</small>Nombrar la frustración antes que el producto</button>
+        <button type="button" data-go="galeria"><small>03</small>Más de mi contenido</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 caso 1 -->
+  <section class="slide case" data-id="caso-1" data-title="Caso 1 · Ahorro" data-group="Mi trabajo">
+    <div class="inner">
+      <div class="st"><div class="phone" data-v="0"></div></div>
+      <div style="min-width:0">
+        <div class="head" style="margin-bottom:16px">
+          <span class="eyebrow st">Caso 01 · Video para anuncio</span>
+          <h2 class="h2 st" style="font-size:clamp(1.7rem,3.4vw,2.6rem)">Detener el scroll <em>con una orden.</em></h2>
+          <div class="case-meta st"><span>Comparador de seguros de carro</span><span>Talking head + B-roll</span><span>33 s</span></div>
+        </div>
+        <div class="angle st"><small>Ángulo</small>Ahorro concreto: mostrar el antes y el después del precio con cifras reales.</div>
+        <div class="beats st" data-beats="0"></div>
+        <p class="tip">Toca un momento para ir a esa parte del video.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 caso 2 -->
+  <section class="slide case rs" data-id="caso-2" data-title="Caso 2 · Fricción" data-group="Mi trabajo">
+    <div class="inner">
+      <div class="st"><div class="phone" data-v="1"></div></div>
+      <div style="min-width:0">
+        <div class="head" style="margin-bottom:16px">
+          <span class="eyebrow st">Caso 02 · Video para anuncio</span>
+          <h2 class="h2 st" style="font-size:clamp(1.7rem,3.4vw,2.6rem)">Nombrar la frustración <em>antes que el producto.</em></h2>
+          <div class="case-meta st"><span>Comparador de seguros de carro</span><span>Talking head + stock B-roll</span><span>32 s</span></div>
+        </div>
+        <div class="angle st"><small>Ángulo</small>Fricción y privacidad: el problema no es solo el precio, es el proceso.</div>
+        <div class="beats st" data-beats="1"></div>
+        <p class="tip">Toca un momento para ir a esa parte del video.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- galería -->
+  <section class="slide" data-id="galeria" data-title="Más de mi contenido" data-group="Mi trabajo">
+    <div class="inner">
+      <div class="head">
+        <span class="eyebrow st">Galería</span>
+        <h2 class="h2 st">Más de <em>mi contenido.</em></h2>
+        <div class="fchips st" id="fchips"></div>
+      </div>
+      <div class="gal st" id="gal"></div>
+    </div>
+  </section>
+
+  <!-- tarifas -->
+  <section class="slide rs" data-id="tarifas" data-title="Tarifas" data-group="Tarifas">
+    <div class="inner">
+      <div class="head">
+        <span class="eyebrow st">Tarifas</span>
+        <h2 class="h2 st">Elige dónde <em>vive tu contenido.</em></h2>
+      </div>
+      <div class="rate-grid st" id="rates"></div>
+    </div>
+  </section>
+
+  <!-- ads y más -->
+  <section class="slide rs" data-id="ads" data-title="Ads, colaboración y más" data-group="Tarifas">
+    <div class="inner">
+      <div class="head">
+        <span class="eyebrow st">Tarifas · Uso en anuncios y más</span>
+        <h2 class="h2 st">Si el video va a pauta, <em>se suma la licencia.</em></h2>
+        <p class="lead st">El uso orgánico está incluido en todos los videos. Para usarlos en anuncios pagos, se suma una licencia por video según el tiempo.</p>
+      </div>
+      <div class="two st">
+        <div>
+          <p class="colh">Licencia para ads · por video</p>
+          <div class="rows" id="rows-ads"></div>
+          <p class="tip" style="margin-left:4px">¿Necesitas más de 90 días? Lo conversamos y llegamos a un acuerdo.</p>
+        </div>
+        <div style="display:grid;gap:16px">
+          <div><p class="colh">Colaboración con mi perfil</p><div class="rows" id="rows-collab"></div></div>
+          <div class="note-card"><b>Exclusividad</b><p>Si tu marca necesita exclusividad de categoría, la revisamos y la acordamos según el caso.</p></div>
+          <div class="note-card"><b>Día de grabación</b><p>También podemos cotizar un día de grabación o de fotos para tu marca. La marca proporciona el lugar, el equipo y todo lo necesario; yo llego a grabar.</p></div>
+        </div>
+      </div>
+      <p class="tip st" style="margin-top:18px">Valores en pesos colombianos (COP). ¿Necesitas algo personalizado? <button type="button" class="linkish" data-pack="Una propuesta personalizada">Escríbeme y lo armamos.</button></p>
+    </div>
+  </section>
+
+  <!-- 14 condiciones -->
+  <section class="slide" data-id="informacion" data-title="Información importante" data-group="Cómo trabajo">
+    <div class="inner">
+      <div class="head">
+        <span class="eyebrow st">Información importante</span>
+        <h2 class="h2 st">Para que todo fluya <em>desde el inicio.</em></h2>
+      </div>
+      <div class="cond st" id="cond"></div>
+    </div>
+  </section>
+
+  <!-- 15 proceso -->
+  <section class="slide dk" data-id="proceso" data-title="Proceso" data-group="Cómo trabajo">
+    <div class="inner">
+      <div class="head">
+        <span class="eyebrow st">Cómo trabajamos</span>
+        <h2 class="h2 st">Simple, claro <em>y a tiempo.</em></h2>
+      </div>
+      <div class="steps st" id="steps"><div class="track"><i></i></div></div>
+    </div>
+  </section>
+
+  <!-- 16 contacto -->
+  <section class="slide bg contact" data-id="contacto" data-title="Contacto" data-group="Cómo trabajo">
+    <div class="inner">
+      <div style="display:grid;gap:18px">
+        <span class="eyebrow st">Contacto</span>
+        <h2 class="st">Hagamos contenido que tu comunidad <span>sí quiera ver.</span></h2>
+        <p class="interest st" id="interest">Escríbeme con tu producto y lo que quieres lograr.</p>
+      </div>
+      <div class="c-card st">
+        <div class="c-row"><div><small>Correo</small><b id="c-email"></b></div><button class="copy" type="button" id="copy-email">Copiar</button></div>
+        <div class="c-row"><div><small>Instagram</small><a id="c-ig" target="_blank" rel="noopener"></a></div></div>
+        <div class="c-row"><div><small>TikTok</small><a id="c-tt" target="_blank" rel="noopener"></a></div></div>
+        <div class="c-row"><div><small>Ubicación</small><b>Medellín, Colombia · Trabajo con marcas de cualquier país</b></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="bottom">
+  <div class="prog"><i id="prog"></i></div>
+  <span class="count" id="count">01 / 16</span>
+  <div class="navs">
+    <button class="nbtn" type="button" id="prev" aria-label="Diapositiva anterior">←</button>
+    <button class="nbtn" type="button" id="next" aria-label="Diapositiva siguiente">→</button>
+  </div>
+</footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Vista ampliada">
+  <div class="lb-inner">
+    <div class="lb-frame" id="lb-frame"></div>
+    <div class="lb-cap"><b id="lb-title"></b><button class="m-close" id="lb-close" type="button" aria-label="Cerrar">×</button></div>
+  </div>
+</div>
+
+<div class="menu" id="menu" hidden role="dialog" aria-modal="true" aria-label="Dossier comercial">
+  <div class="inner">
+    <div class="m-top"><span class="logo">Dossier comercial<span> · Laura Duque</span></span><button class="m-close" type="button" id="menu-close" aria-label="Cerrar menú">×</button></div>
+    <div class="m-grid" id="m-grid"></div>
+    <div class="m-foot"><span>Laura Duque Morales · Creadora de contenido · 2026</span><button class="btn btn-p" type="button" data-go="contacto" style="background:var(--ivory);color:var(--burgundy)">Trabajemos juntas →</button></div>
+  </div>
+</div>
+
+<script>
+/* ==================================================================
+   TUS DATOS: edita solo este bloque. Precios: solo el número, sin puntos (180000).
+   ================================================================== */
+const MONEDA = "COP";            // "COP" o "USD"
+const PERFIL = { foto: "", correo: "[TU CORREO]", instagram: "@TU_USUARIO", tiktok: "@TU_USUARIO" };
+
+/* Más de mi contenido: agrega tus videos y fotos.
+   tipo "video": src = archivo .mp4 · tipo "foto": src = imagen. src vacío = espacio de muestra.
+   objetivo (opcional): "Conexión", "Alcance" o "Comercial", como en tu estrategia. */
+const GALERIA = [
+  { tipo: "video", titulo: "Rutina de skincare", src: "" },
+  { tipo: "foto", titulo: "Producto", src: "" },
+  { tipo: "video", titulo: "Get ready with me", src: "" },
+  { tipo: "foto", titulo: "Retrato", src: "" },
+  { tipo: "video", titulo: "Reseña honesta", src: "" },
+  { tipo: "foto", titulo: "Rutina", src: "" },
+  { tipo: "video", titulo: "Día en mi vida", src: "" },
+  { tipo: "foto", titulo: "Detalle", src: "" }
+];
+
+/* Tarifas (en pesos, solo números) */
+const TARIFAS = [
+  { tipo: "En el perfil de la marca", nombre: "Video UGC", precio: 180000, unidad: "por video",
+    incluye: ["Guion y gancho en mi voz", "Grabación y edición vertical 9:16", "1 ronda de ajustes", "Uso orgánico en las redes de la marca"] },
+  { tipo: "En mi perfil", nombre: "Reel o TikTok", precio: 220000, unidad: "por video",
+    incluye: ["Guion aprobado por la marca", "Publicación en Instagram o TikTok", "El video queda publicado en mi perfil"] },
+  { tipo: "En mi perfil", nombre: "Historias", precio: 90000, unidad: "por 3 historias",
+    incluye: ["3 historias en secuencia", "Enlace o código de descuento", "Duración de 24 horas"] }
+];
+/* Licencia para ads: valor que se suma por cada video. Máximo 90 días */
+const ADS = [
+  { nombre: "30 días", nota: "Meta Ads o TikTok Ads", precio: 60000 },
+  { nombre: "60 días", nota: "Meta Ads o TikTok Ads", precio: 100000 },
+  { nombre: "90 días", nota: "Meta Ads o TikTok Ads", precio: 140000 }
+];
+const COLLAB = [
+  { nombre: "Publicación en colaboración", nota: "El video UGC también sale en mi perfil, en coautoría", precio: 60000, unidad: "por video" }
+];
+
+/* Información importante */
+const CONDICIONES = [
+  ["Pago", "50 % anticipado para reservar la fecha y empezar el guion. El 50 % restante se paga cuando entrego el contenido."],
+  ["Producto", "La marca envía el producto sin costo. Desde el inicio, la marca confirma si debo devolverlo o no. El tiempo de entrega empieza cuando lo recibo."],
+  ["Tiempos", "Guion en 2 a 3 días hábiles después del brief. Videos en 5 a 7 días hábiles después de aprobar el guion."],
+  ["Ajustes", "Cada video incluye 1 ronda de ajustes sobre edición y texto. Grabar de nuevo por un cambio de brief tiene costo adicional."],
+  ["Uso del contenido", "El uso orgánico en las redes de la marca está incluido. Para anuncios pagos se suma la licencia, hasta 90 días. Si necesitas más tiempo, lo acordamos."],
+  ["Publicaciones en mi perfil", "La fecha se acuerda con la marca. Los videos quedan publicados en mi perfil."],
+  ["Honestidad", "Solo recomiendo productos que pruebo y con los que me siento cómoda. Si algo no encaja con mi comunidad, te lo digo antes de empezar."],
+  ["Cancelación", "Si el proyecto se cancela después de aprobar el guion, el anticipo no es reembolsable."]
+];
+/* ================================================================== */
+
+const VIDEOS = [
+  { src: "media/video-1.mp4", beats: [
+    [0, "Gancho · interrupción", "Abro con una orden directa que frena el scroll y habla justo a quien está por pagar.", "¡Espera! No pagues tu seguro de carro este mes todavía."],
+    [3, "Ancla de precio", "Escribo $233 a mano en un cuaderno. El dolor se vuelve un número concreto y visual.", "Yo pagaba $233 al mes…"],
+    [10, "Descubrimiento en primera persona", "Cuento cómo lo encontré yo. No suena a vendedora, suena a recomendación.", "Encontré una página que compara opciones."],
+    [15, "Prueba con contraste", "De $233 a $53 por dos carros. El contraste hace el trabajo de convencer.", "Mira mi precio ahora: $53 al mes."],
+    [19, "Objeción resuelta", "Quito el miedo más común antes de que aparezca: tener que hablar con un agente.", "Ni siquiera tuve que hablar con un agente."],
+    [24, "Enemigo común", "Pongo el problema afuera, en las aseguradoras. La audiencia se siente validada, no juzgada.", "Nos hacen pagar de más, y casi nadie lo revisa."],
+    [29, "Baja fricción + CTA", "Cierro con lo fácil que es y una llamada a la acción corta y directa.", "Me tomó como dos minutos. Pruébalo."]
+  ]},
+  { src: "media/video-2.mp4", beats: [
+    [0, "Gancho · identificación", "Abro con “si alguna vez…”. Quien lo vivió se queda; así el video filtra a su propia audiencia.", "Si alguna vez llenaste uno de esos formularios…"],
+    [2.5, "Agitar el problema", "Enumero lo que molesta: tiempo, trabajo, crédito. Uso B-roll de formularios para que se vea.", "Diez minutos contestando sobre tu vida entera."],
+    [10, "La promesa rota", "Nombro la frustración final: el precio nunca coincide con el anuncio.", "El precio no se parece en nada al del anuncio."],
+    [14, "Empatía", "Me pongo del mismo lado: no lo cuento como experta, lo cuento como alguien que lo vivió.", "A mí me pasó por años."],
+    [16.5, "Solución por simplicidad", "Frases cortas y conteo con los dedos. El ritmo comunica lo fácil que es.", "Solo código postal y tu carro. Nada más."],
+    [24, "Privacidad + prueba", "Respondo la objeción de privacidad y cierro con el mismo resultado concreto.", "Sin preguntas personales. $53 al mes."],
+    [29, "CTA", "Cierre corto: una sola acción, sin distracciones.", "El link está abajo."]
+  ]}
+];
+const FORMATOS = [
+  ["Rutina", "Paso a paso de cómo uso el producto en mi día."],
+  ["Reseña honesta", "Primeras impresiones y lo que de verdad noté."],
+  ["Get ready with me", "Me arreglo mientras te cuento algo. El producto entra solo."],
+  ["Testimonio para ads", "Problema, descubrimiento, prueba y llamada a la acción."],
+  ["Storytime + producto", "Una reflexión personal que conecta con lo que vendes."],
+  ["Día en mi vida", "El producto dentro de un vlog cotidiano y natural."]
+];
+const PASOS = [
+  ["Brief", "Me cuentas tu producto, tu público y lo que quieres lograr.", "Día 1"],
+  ["Guion", "Te propongo ángulos y ganchos en mi voz. Tú apruebas antes de grabar.", "2 a 3 días hábiles"],
+  ["Creación", "Grabo y edito con el producto en mi día a día, como lo usaría de verdad.", "5 a 7 días hábiles"],
+  ["Entrega", "Recibes los archivos listos para publicar, con los ajustes acordados.", "Según paquete"]
+];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const num = v => v === "" || v == null ? null : Number(String(v).replace(/[^\d.]/g, ""));
+const money = v => v == null ? "Por definir" : new Intl.NumberFormat(MONEDA === "COP" ? "es-CO" : "en-US", { style: "currency", currency: MONEDA, maximumFractionDigits: 0 }).format(v);
+const priceOrTodo = v => num(v) == null ? `<span class="todo">Por definir</span>` : money(num(v));
+const fmtT = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+
+/* ---------- contenido ---------- */
+if (PERFIL.foto) $("#profile").innerHTML = `<img src="${esc(PERFIL.foto)}" alt="Laura Duque">`;
+$("#fchips").innerHTML = FORMATOS.map(([t]) => `<span>${t}</span>`).join("");
+$("#steps").insertAdjacentHTML("beforeend", PASOS.map(([t, d, w], i) => `<div class="step"><span class="dot">0${i + 1}</span><h3>${t}</h3><p>${d}</p><small>${w}</small></div>`).join(""));
+$("#cond").innerHTML = CONDICIONES.map(([t, d], i) => `<button type="button" class="ci" aria-expanded="${i < 2}"><span class="ci-top"><i>${i + 1}</i><b>${t}</b><span class="pl"></span></span><span class="ci-body"><div><p>${d}</p></div></span></button>`).join("");
+$("#cond").addEventListener("click", e => { const b = e.target.closest(".ci"); if (b) b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") !== "true"); });
+
+/* galería */
+const TONOS = ["linear-gradient(165deg,#7A2440,#3A0C1E)", "linear-gradient(165deg,#E9CDD4,#B86B7E)", "linear-gradient(165deg,#5C1430,#2B0A16)", "linear-gradient(165deg,#F3E7EA,#C98A9A)"];
+$("#gal").innerHTML = GALERIA.map((g, i) => {
+  const media = g.src ? (g.tipo === "video" ? `<video src="${esc(g.src)}#t=0.4" muted playsinline preload="metadata"></video>` : `<img src="${esc(g.src)}" alt="${esc(g.titulo)}" loading="lazy">`) : "";
+  return `<button type="button" class="gi ${g.tipo}" data-i="${i}" style="--g:${TONOS[i % TONOS.length]}" aria-label="${g.tipo === "video" ? "Ver video" : "Ver foto"}: ${esc(g.titulo)}">${media}${g.tipo === "video" ? `<span class="gplay"></span>` : ""}<span class="gcap"><small>${g.tipo === "video" ? "Video" : "Foto"}${g.objetivo ? " · " + esc(g.objetivo) : ""}</small>${esc(g.titulo)}</span></button>`;
+}).join("");
+$("#gal").addEventListener("click", e => {
+  const b = e.target.closest(".gi"); if (!b) return;
+  const g = GALERIA[+b.dataset.i];
+  $("#lb-frame").style.setProperty("--g", TONOS[+b.dataset.i % TONOS.length]);
+  $("#lb-frame").className = "lb-frame " + g.tipo;
+  $("#lb-frame").innerHTML = !g.src ? `<div class="lb-empty"><b>${esc(g.titulo)}</b><span>Aquí va tu ${g.tipo}.</span></div>`
+    : g.tipo === "video" ? `<video src="${esc(g.src)}" controls autoplay playsinline></video>` : `<img src="${esc(g.src)}" alt="${esc(g.titulo)}">`;
+  $("#lb-title").textContent = g.titulo;
+  lbLast = b; $("#lb").hidden = false; $("#lb-close").focus();
+});
+let lbLast = null;
+const closeLb = () => { if ($("#lb").hidden) return; $("#lb").hidden = true; $("#lb-frame").innerHTML = ""; lbLast?.focus(); };
+$("#lb-close").addEventListener("click", closeLb);
+$("#lb").addEventListener("click", e => { if (e.target.id === "lb") closeLb(); });
+
+/* tarifas */
+$("#rates").innerHTML = TARIFAS.map(r => `<article class="rate"><small>${esc(r.tipo)}</small><h3>${esc(r.nombre)}</h3><div class="price">${money(num(r.precio))} <span style="font-size:.74rem;font-weight:400;opacity:.7">${esc(r.unidad)}</span></div><ul>${r.incluye.map(x => `<li>${esc(x)}</li>`).join("")}</ul></article>`).join("");
+const row = r => `<div class="row"><div><b>${esc(r.nombre)}</b><span>${esc(r.nota)}</span></div><span class="v">${r.precio ? "+ " + money(num(r.precio)) : "A convenir"}</span></div>`;
+$("#rows-ads").innerHTML = ADS.map(row).join("");
+$("#rows-collab").innerHTML = COLLAB.map(row).join("");
+
+/* contacto */
+const handleUrl = (h, base) => h && !h.includes("TU_USUARIO") ? base + h.replace(/^@/, "") : base;
+$("#c-email").textContent = PERFIL.correo;
+$("#c-ig").textContent = PERFIL.instagram; $("#c-ig").href = handleUrl(PERFIL.instagram, "https://instagram.com/");
+$("#c-tt").textContent = PERFIL.tiktok; $("#c-tt").href = handleUrl(PERFIL.tiktok, "https://tiktok.com/@");
+$("#copy-email").addEventListener("click", e => {
+  const b = e.currentTarget;
+  navigator.clipboard?.writeText(PERFIL.correo).then(() => { b.textContent = "Copiado"; setTimeout(() => b.textContent = "Copiar", 1800); })
+    .catch(() => { const r = document.createRange(); r.selectNodeContents($("#c-email")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); });
+});
+const setInterest = t => $("#interest").innerHTML = `Te interesa: <b>${esc(t)}</b>. Escríbeme con tu producto y armamos la propuesta.`;
+document.addEventListener("click", e => { const a = e.target.closest("[data-pack]"); if (a) { setInterest(a.dataset.pack); go(idx("contacto")); } });
+
+/* palabra rotativa */
+(() => { const w = [...document.querySelectorAll("#rot>span")]; let i = 0;
+  setInterval(() => { const c = w[i]; c.classList.remove("on"); c.classList.add("out"); setTimeout(() => c.classList.remove("out"), 600); i = (i + 1) % w.length; w[i].classList.add("on"); }, 2400); })();
+
+/* ---------- videos con momentos ---------- */
+document.querySelectorAll(".phone").forEach(ph => {
+  const V = VIDEOS[+ph.dataset.v];
+  ph.innerHTML = `<video src="${V.src}#t=0.4" playsinline preload="metadata"></video><button class="pbtn" type="button" aria-label="Reproducir video"></button><button class="mute" type="button">Sonido: sí</button><span class="vbar"><i></i></span>`;
+  const v = ph.querySelector("video"), bar = ph.querySelector(".vbar i"), mute = ph.querySelector(".mute");
+  const list = document.querySelector(`[data-beats="${ph.dataset.v}"]`);
+  list.innerHTML = V.beats.map(([t, h, d, q]) => `<button type="button" class="beat" data-t="${t}"><time>${fmtT(t)}</time><span><b>${h}</b><span>${d}</span><span class="q">“${q}”</span></span></button>`).join("");
+  const toggle = () => v.paused ? v.play().catch(() => {}) : v.pause();
+  ph.querySelector(".pbtn").addEventListener("click", toggle);
+  v.addEventListener("click", toggle);
+  v.addEventListener("play", () => ph.classList.add("playing"));
+  v.addEventListener("pause", () => ph.classList.remove("playing"));
+  mute.addEventListener("click", () => { v.muted = !v.muted; mute.textContent = v.muted ? "Sonido: no" : "Sonido: sí"; });
+  const beats = [...list.children];
+  v.addEventListener("timeupdate", () => {
+    bar.style.width = (v.currentTime / (v.duration || 1) * 100) + "%";
+    let cur = 0; beats.forEach((b, i) => { if (v.currentTime >= +b.dataset.t) cur = i; });
+    beats.forEach((b, i) => b.classList.toggle("on", i === cur && v.currentTime > 0));
+  });
+  list.addEventListener("click", e => { const b = e.target.closest(".beat"); if (!b) return; v.currentTime = +b.dataset.t; v.play().catch(() => {}); });
+});
+
+/* ---------- motor de diapositivas ---------- */
+const slides = [...document.querySelectorAll(".slide")];
+const idx = id => Math.max(0, slides.findIndex(s => s.dataset.id === id));
+let cur = -1;
+function go(n) {
+  n = Math.max(0, Math.min(slides.length - 1, n));
+  if (n === cur) return;
+  slides.forEach((s, i) => { s.classList.toggle("on", i === n); s.classList.toggle("prev", i < n); });
+  const prevS = slides[cur]; if (prevS) prevS.querySelectorAll("video").forEach(v => v.pause());
+  cur = n;
+  const s = slides[n]; s.scrollTop = 0;
+  s.querySelectorAll(".reels video").forEach(v => v.play().catch(() => {}));
+  document.body.classList.toggle("dark", s.classList.contains("dk") || s.classList.contains("bg"));
+  $("#count").innerHTML = `${String(n + 1).padStart(2, "0")} / ${slides.length}<b>${esc(s.dataset.title)}</b>`;
+  $("#prog").style.width = ((n + 1) / slides.length * 100) + "%";
+  $("#prev").disabled = n === 0; $("#next").disabled = n === slides.length - 1;
+  try { history.replaceState(null, "", "#" + s.dataset.id); } catch (e) {}
+  renderMenu();
+}
+$("#prev").addEventListener("click", () => go(cur - 1));
+$("#next").addEventListener("click", () => go(cur + 1));
+addEventListener("keydown", e => {
+  if (!$("#menu").hidden) { if (e.key === "Escape") closeMenu(); return; }
+  if (!$("#lb").hidden) { if (e.key === "Escape") closeLb(); return; }
+  if (e.target.closest("input,textarea,select")) return;
+  if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); go(cur + 1); }
+  if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); go(cur - 1); }
+});
+let tx = 0, ty = 0;
+$("#deck").addEventListener("touchstart", e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+$("#deck").addEventListener("touchend", e => {
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(cur + (dx < 0 ? 1 : -1));
+}, { passive: true });
+document.addEventListener("click", e => { const g = e.target.closest("[data-go]"); if (g) { closeMenu(); go(idx(g.dataset.go)); } });
+
+/* menú dossier */
+function renderMenu() {
+  const groups = {};
+  slides.forEach((s, i) => (groups[s.dataset.group] ||= []).push([s, i]));
+  $("#m-grid").innerHTML = Object.entries(groups).map(([g, items]) => `<div class="m-col"><h4>${g}</h4><ol>${items.map(([s, i]) => `<li><button type="button" data-n="${i}" class="${i === cur ? "cur" : ""}"><small>${String(i + 1).padStart(2, "0")}</small>${esc(s.dataset.title)}</button></li>`).join("")}</ol></div>`).join("");
+}
+let lastFocus = null;
+const openMenu = () => { lastFocus = document.activeElement; $("#menu").hidden = false; $("#menu-close").focus(); };
+const closeMenu = () => { if ($("#menu").hidden) return; $("#menu").hidden = true; lastFocus?.focus?.(); };
+$("#menu-open").addEventListener("click", openMenu);
+$("#menu-close").addEventListener("click", closeMenu);
+$("#m-grid").addEventListener("click", e => { const b = e.target.closest("[data-n]"); if (b) { closeMenu(); go(+b.dataset.n); } });
+
+const h = location.hash.slice(1);
+go(h ? idx(h) : 0);
+addEventListener("hashchange", () => { const id = location.hash.slice(1); if (id && id !== slides[cur].dataset.id) go(idx(id)); });
+</script>
+
+</body>
+</html>
