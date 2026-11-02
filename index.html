@@ -510,16 +510,15 @@ body.dark .menu-btn{background:var(--ivory);color:var(--burgundy)}
       <div class="head">
         <span class="eyebrow st">Tarifas · Uso en anuncios y más</span>
         <h2 class="h2 st">Si el video va a pauta, <em>se suma la licencia.</em></h2>
-        <p class="lead st">El uso orgánico está incluido en todos los videos. Para usarlos en anuncios pagos, se suma una licencia por video según el tiempo.</p>
+        <p class="lead st">El uso orgánico está incluido en todos los videos. Si la marca quiere usarlos en anuncios pagos, se suma una licencia de uso.</p>
       </div>
       <div class="two st">
-        <div>
-          <p class="colh">Licencia para ads · por video</p>
-          <div class="rows" id="rows-ads"></div>
-          <p class="tip" style="margin-left:4px">¿Necesitas más de 90 días? Lo conversamos y llegamos a un acuerdo.</p>
+        <div style="display:grid;gap:16px">
+          <div><p class="colh">Licencia para anuncios</p>
+          <div class="note-card"><b>Según los días de uso</b><p>Si el video va a pauta en Meta Ads o TikTok Ads, la tarifa del contenido aumenta según la cantidad de días de licencia (30, 60 o 90 días). El valor exacto lo comparto por interno cuando armamos tu cotización.</p></div></div>
+          <div><p class="colh">Colaboración con mi perfil</p><div class="rows" id="rows-collab"></div></div>
         </div>
         <div style="display:grid;gap:16px">
-          <div><p class="colh">Colaboración con mi perfil</p><div class="rows" id="rows-collab"></div></div>
           <div class="note-card"><b>Exclusividad</b><p>Si tu marca necesita exclusividad de categoría, la revisamos y la acordamos según el caso.</p></div>
           <div class="note-card"><b>Día de grabación</b><p>También podemos cotizar un día de grabación o de fotos para tu marca. La marca proporciona el lugar, el equipo y todo lo necesario; yo llego a grabar.</p></div>
         </div>
@@ -562,7 +561,7 @@ body.dark .menu-btn{background:var(--ivory);color:var(--burgundy)}
         <div class="c-row"><div><small>Correo</small><b id="c-email"></b></div><button class="copy" type="button" id="copy-email">Copiar</button></div>
         <div class="c-row"><div><small>Instagram</small><a id="c-ig" target="_blank" rel="noopener"></a></div></div>
         <div class="c-row"><div><small>TikTok</small><a id="c-tt" target="_blank" rel="noopener"></a></div></div>
-        <div class="c-row"><div><small>Ubicación</small><b>Medellín, Colombia · Trabajo con marcas de cualquier país</b></div></div>
+        <div class="c-row"><div><small>Teléfono y WhatsApp</small><a id="c-tel" target="_blank" rel="noopener"></a></div></div>
       </div>
     </div>
   </section>
@@ -597,7 +596,7 @@ body.dark .menu-btn{background:var(--ivory);color:var(--burgundy)}
    TUS DATOS: edita solo este bloque. Precios: solo el número, sin puntos (180000).
    ================================================================== */
 const MONEDA = "COP";            // "COP" o "USD"
-const PERFIL = { foto: "perfil.jpg", correo: "[TU CORREO]", instagram: "@TU_USUARIO", tiktok: "@TU_USUARIO" };
+const PERFIL = { foto: "perfil.jpg", correo: "lauraduquem03@gmail.com", instagram: "@lauduque_03", tiktok: "@lauduque03", telefono: "+57 300 406 3694" };
 
 /* Galería: los "video" salen en la diapositiva Videos y las "foto" en Fotos, en este orden.
    src = nombre del archivo (en la misma carpeta que index.html). titulo (opcional) = texto sobre la tarjeta.
@@ -632,12 +631,6 @@ const TARIFAS = [
   { tipo: "En mi perfil", nombre: "Historias", precio: 90000, unidad: "por 3 historias",
     incluye: ["3 historias en secuencia", "Enlace o código de descuento", "Duración de 24 horas"] }
 ];
-/* Licencia para ads: valor que se suma por cada video. Máximo 90 días */
-const ADS = [
-  { nombre: "30 días", nota: "Meta Ads o TikTok Ads", precio: 60000 },
-  { nombre: "60 días", nota: "Meta Ads o TikTok Ads", precio: 100000 },
-  { nombre: "90 días", nota: "Meta Ads o TikTok Ads", precio: 140000 }
-];
 const COLLAB = [
   { nombre: "Publicación en colaboración", nota: "El video UGC también sale en mi perfil, en coautoría", precio: 60000, unidad: "por video" }
 ];
@@ -648,7 +641,7 @@ const CONDICIONES = [
   ["Producto", "La marca envía el producto sin costo. Desde el inicio, la marca confirma si debo devolverlo o no. El tiempo de entrega empieza cuando lo recibo."],
   ["Tiempos", "Guion en 2 a 3 días hábiles después del brief. Videos en 5 a 7 días hábiles después de aprobar el guion."],
   ["Ajustes", "Cada video incluye 1 ronda de ajustes sobre edición y texto. Grabar de nuevo por un cambio de brief tiene costo adicional."],
-  ["Uso del contenido", "El uso orgánico en las redes de la marca está incluido. Para anuncios pagos se suma la licencia, hasta 90 días. Si necesitas más tiempo, lo acordamos."],
+  ["Uso del contenido", "El uso orgánico en las redes de la marca está incluido. Para anuncios pagos se suma la licencia; su valor depende de los días de uso y lo comparto por interno."],
   ["Publicaciones en mi perfil", "La fecha se acuerda con la marca. Los videos quedan publicados en mi perfil."],
   ["Honestidad", "Solo recomiendo productos que pruebo y con los que me siento cómoda. Si algo no encaja con mi comunidad, te lo digo antes de empezar."],
   ["Cancelación", "Si el proyecto se cancela después de aprobar el guion, el anticipo no es reembolsable."]
@@ -742,7 +735,6 @@ $("#lb").addEventListener("click", e => { if (e.target.id === "lb") closeLb(); }
 /* tarifas */
 $("#rates").innerHTML = TARIFAS.map(r => `<article class="rate"><small>${esc(r.tipo)}</small><h3>${esc(r.nombre)}</h3><div class="price">${money(num(r.precio))} <span style="font-size:.74rem;font-weight:400;opacity:.7">${esc(r.unidad)}</span></div><ul>${r.incluye.map(x => `<li>${esc(x)}</li>`).join("")}</ul></article>`).join("");
 const row = r => `<div class="row"><div><b>${esc(r.nombre)}</b><span>${esc(r.nota)}</span></div><span class="v">${r.precio ? "+ " + money(num(r.precio)) : "A convenir"}</span></div>`;
-$("#rows-ads").innerHTML = ADS.map(row).join("");
 $("#rows-collab").innerHTML = COLLAB.map(row).join("");
 
 /* contacto */
@@ -750,6 +742,7 @@ const handleUrl = (h, base) => h && !h.includes("TU_USUARIO") ? base + h.replace
 $("#c-email").textContent = PERFIL.correo;
 $("#c-ig").textContent = PERFIL.instagram; $("#c-ig").href = handleUrl(PERFIL.instagram, "https://instagram.com/");
 $("#c-tt").textContent = PERFIL.tiktok; $("#c-tt").href = handleUrl(PERFIL.tiktok, "https://tiktok.com/@");
+$("#c-tel").textContent = PERFIL.telefono; $("#c-tel").href = "https://wa.me/" + PERFIL.telefono.replace(/\D/g, "");
 $("#copy-email").addEventListener("click", e => {
   const b = e.currentTarget;
   navigator.clipboard?.writeText(PERFIL.correo).then(() => { b.textContent = "Copiado"; setTimeout(() => b.textContent = "Copiar", 1800); })
